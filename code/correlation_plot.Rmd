@@ -1,0 +1,72 @@
+---
+title: "Correlation plot"
+author: "GRBIO Divulga"
+date: "22nd June 2021"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+#####################################################
+# Libraries
+#####################################################
+library(tidyverse) 
+library(ellipse)      
+library(RColorBrewer)      
+library(corrplot)
+library(TeachingDemos)     # subplot for plotting histograms 
+library(viridis)           # colour blind friendly palette, works in B&W also
+
+#####################################################
+# Load data
+#####################################################
+# load('datos.RData') --> Data is not available
+source('my_plotcorr.R')
+```
+
+
+```{r echo=FALSE, fig.width=10, fig.height=8, message=FALSE, warning=FALSE}
+# round(cor(d_patients[,sapply(d_patients,class)=='numeric'],use = 'pair'),2)
+VAR_COR <- c('uci_dias','temp_ultima','temp_primera','sat_02_ultima','sat_02_primera')
+
+# Use of the mtcars data proposed by R
+d0 <- d_patients %>% dplyr::select(all_of(VAR_COR))
+# d0 <- d0 %>% mutate(uci_dias=ifelse(is.na(uci_dias),0,uci_dias))
+d0 <- d0 %>% filter(!is.na(uci_dias))
+names(d0) <- c('ICU days','Final Temperature','Baseline Temperature','Final O2Sat','Baseline O2Sat')
+data <- cor(d0,use = 'pairwise')
+
+# Build a Pannel of 100 colors with Rcolor Brewer
+my_colors <- brewer.pal(5, "RdBu")
+my_colors <- colorRampPalette(my_colors)(100)
+
+colsc=c(rgb(241, 54, 23, maxColorValue=255), 'white', rgb(0, 61, 104, maxColorValue=255))
+colramp = colorRampPalette(colsc, space='Lab')
+my_colors = colramp(100)
+my_colors = colramp(100)
+my_colors = brewer.pal(n=9, name='BuPu')
+my_colors = rev(viridis(n=9, alpha = 1, begin = 0, end = 1, direction = 1, option = "B"))
+
+# Order the correlation matrix
+ord <- order(data[1, ])
+data_ord <- data[ord, ord]
+# https://hlplab.wordpress.com/2012/03/20/correlation-plot-matrices-using-the-ellipse-library/
+d00 <- as.data.frame(d0[,c(4,5,2,3,1)])
+esc <- 6
+
+##-- With transparency
+par(xpd=NA,lwd=2,bg=NA,bty='o')
+my.plotcorr(data_ord , col=my_colors[data_ord*4+5] , mar=c(0,1,3,1), 
+            diag='hist', lower.panel="number", main='',cex.lab=1.1,cex=1.6,
+            dataset=d00,labels=rev(expression(bold('ICU days'), 
+                                              bold('Final Temperature'),
+                                              bold('Baseline Temperature'),
+                                              bold('Final'~O[2]~Sat.),
+                                              bold('Baseline'~O[2]~Sat.))),
+            bty='o')
+colorlegend2(my_colors, labels=seq(-1,1,length.out = 5),# at=seq(0.05,1,l=6),
+            vertical = TRUE,align='c',offset=0, font=2, 
+            xlim=c(6,6.6),ylim=c(2.7,4.3),adj=0.5)
+invisible(par(xpd=FALSE,lwd=1,bg='white'))
+```

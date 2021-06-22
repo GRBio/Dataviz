@@ -1,0 +1,205 @@
+---
+title: "Sankey diagram"
+author: "GRBIO Divulga"
+date: "22nd June 2021"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+#####################################################
+# Libraries
+#####################################################
+library(tidyverse)
+library(networkD3)    
+library(htmlwidgets)
+
+
+#####################################################
+# Load data
+#####################################################
+# load('datos.RData') --> Data is not available
+```
+
+
+```{r message=FALSE, fig.width=5.6, fig.height=7}
+#####################################################
+# Define states
+#####################################################
+# Admission --> ICU
+adm_icu <- sum(!is.na(d_patients$f_entrada_uci))
+# Admission --> Death
+adm_death <- sum(is.na(d_patients$f_entrada_uci) &
+                 d_patients$motivo_alta=="Fallecimiento",na.rm = TRUE)
+# Admission --> Discharge
+adm_disch  <- sum(is.na(d_patients$f_entrada_uci) &
+                  d_patients$motivo_alta=="Domicilio",na.rm = TRUE)
+# Admission --> Transfer
+adm_tras   <- sum(is.na(d_patients$f_entrada_uci) &
+                  substr(d_patients$motivo_alta,1,8)=="Traslado",na.rm = TRUE)
+# Admission --> Ward
+adm_ward   <- sum(is.na(d_patients$f_entrada_uci) &
+                  is.na(d_patients$f_alta))
+
+# ICU --> Death
+icu_death <- sum(!is.na(d_patients$f_entrada_uci) &
+                 d_patients$motivo_alta=="Fallecimiento",na.rm = TRUE)
+# ICU --> Discharge
+icu_disch  <- sum(!is.na(d_patients$f_entrada_uci) &
+                  d_patients$motivo_alta=="Domicilio",na.rm = TRUE)
+# ICU --> Transfer
+icu_tras   <- sum(!is.na(d_patients$f_entrada_uci) &
+                  substr(d_patients$motivo_alta,1,8)=="Traslado",na.rm = TRUE)
+# ICU --> Ward
+icu_ward   <- sum(!is.na(d_patients$f_entrada_uci) &
+                  is.na(d_patients$f_alta))
+
+##---------------------------
+# STATES MATRIX
+##---------------------------
+STATES_MATRIX <- matrix(0,nrow=5,ncol=5)
+colnames(STATES_MATRIX) <- rownames(STATES_MATRIX) <- c("Admission","ICU","Discharge","Death","Ward")
+STATES_MATRIX['Admission','ICU'] <- adm_icu
+STATES_MATRIX['Admission','Discharge'] <- adm_disch
+STATES_MATRIX['Admission','Death'] <- adm_death
+STATES_MATRIX['Admission','Ward'] <- adm_ward
+
+STATES_MATRIX['ICU','Discharge'] <- icu_disch
+STATES_MATRIX['ICU','Death'] <- icu_death
+STATES_MATRIX['ICU','Ward'] <- icu_ward
+
+
+##---------------------------
+# LEVELS AND COLORS
+##---------------------------
+LEVELS <- c('Admission'=1,'ICU'=2,'Discharge'=3,'Death'=3,"Ward"=3)
+COLS   <- c('Admission'='#1167b1',
+            'ICU'='#ff8b3d',
+            'Discharge'='#809c13',
+            'Death'='#a70000',
+            'Ward'='#1c2e4a')
+##---------------------------
+# GRAPHIC PARAMETERS
+##---------------------------
+padding = 5
+alpha = 0.5
+label = FALSE
+label_color = TRUE
+label_fontface = "bold"
+label_size = 10
+color_steps = 500
+
+
+N <- sum(STATES_MATRIX[names(LEVELS)[LEVELS==1],],na.rm=TRUE)
+n_states <- nrow(STATES_MATRIX)
+n_levels <- length(unique(LEVELS))
+
+g <- ggplot() + scale_x_continuous(limits = c(-0.1, 2.1)) + scale_y_continuous(limits = c(-50, 2200)) 
+current_height_ini <- c(0,1000,0)
+current_height_end <- c(0,1000,0)
+
+# Initial y-component for an specific state 
+current_height_ini <- c('Admission'=0,
+                'ICU'=1000,
+                'Discharge'=0,
+                'Death'= padding + sum(STATES_MATRIX[,'Discharge']),
+                'Ward'= 2*padding + sum(STATES_MATRIX[,c('Discharge','Death')]))
+
+# Final y-component for an specific state
+current_height_end <- c('Admission'=0,
+                'ICU'=1000,
+                'Discharge'=0,
+                'Death'= padding + sum(STATES_MATRIX[,'Discharge']),
+                'Ward'= 2*padding + sum(STATES_MATRIX[,c('Discharge','Death')]))
+
+for(row in 1:(n_states-1)){
+
+  for(column in (row+1):n_states){
+    state_ini <- rownames(STATES_MATRIX)[row]
+    state_end <- colnames(STATES_MATRIX)[column]
+    
+    x_ini <- as.numeric(LEVELS[state_ini])
+    x_end <- as.numeric(LEVELS[state_end])
+    x <- seq(0, 1, length = color_steps + 1)
+    
+    value <- STATES_MATRIX[state_ini,state_end]
+    
+    if(x_ini!=x_end & value!=0){
+      col_ini <- as.character(COLS[state_ini])
+      col_end <- as.character(COLS[state_end])
+      
+      bottom_ini <- current_height_ini[state_ini] 
+      top_ini <- current_height_ini[state_ini] + value
+      current_height_ini[state_ini] <- top_ini 
+      
+      bottom_end <- current_height_end[state_end]
+      top_end <- current_height_end[state_end] + value
+      current_height_end[state_end] <- top_end 
+      bot <- matrix(c(0, bottom_ini, 1, bottom_ini, 3, bottom_end, 4,bottom_end), nrow = 4, ncol = 2, byrow = TRUE)
+      top <- matrix(c(0, top_ini, 1, top_ini, 3, top_end, 4,top_end), nrow = 4, ncol = 2, byrow = TRUE)
+      col_r <- colorRampPalette(c(as.character(col_ini),as.character(col_end)))(length(x))
+      
+      cat <- paste0(row,'_',column)
+      bez <- data.frame()
+      bez <- bind_rows(bez, data.frame(cat = cat, 
+                                       x = x, 
+                                       col = col_r, 
+                                       bez_b = bezier::bezier(t = x, p = bot)[, 2], 
+                                       bez_t = bezier::bezier(t = x,p = top)[, 2], stringsAsFactors = FALSE))
+      b1 <- bez %>% group_by(cat) %>% mutate(x1 = x, x2 = lead(x), 
+                                             x3 = lead(x), x4 = x, 
+                                             geom_n = paste0(cat, ".",row_number())) %>% 
+        pivot_longer(cols = c(x1,x2,x3, x4), names_to = "x_name", values_to = "x_path")
+      b2 <- bez %>% group_by(cat) %>% mutate(y1 = bez_t, y2 = lead(bez_t), 
+                                             y3 = lead(bez_b), y4 = bez_b) %>% 
+        pivot_longer(cols = c(y1,y2, y3, y4), names_to = "y_name", values_to = "y_path")
+      
+      b1 <- bind_cols(b1, b2[, "y_path"])
+      
+      b1$x <- b1$x*(x_end-x_ini) + (x_ini-1)
+      b1$x_path <- b1$x_path*(x_end-x_ini) + (x_ini-1)
+      
+      g <- g + geom_polygon(data = b1[b1$cat==cat,], aes(x = x_path, y = y_path, group = geom_n), 
+                            color = NA, fill = b1$col, size = 0, alpha = alpha)
+      
+      ##-- Add polygon state
+      sep <- 0.05
+      datapoly_ini <- data.frame(x=c(x_ini-sep,x_ini-sep,x_ini+sep,x_ini+sep)-1,
+                                 y=c(bottom_ini,top_ini,top_ini,bottom_ini))
+      datapoly_end <- data.frame(x=c(x_end-sep,x_end-sep,x_end+sep,x_end+sep)-1,
+                                 y=c(bottom_end,top_end,top_end,bottom_end))
+      if(row==1 &column==2) datapoly <- datapoly_end
+      
+      g <- g + geom_polygon(data=datapoly_ini,mapping=aes(x=x,y=y),color=NA,alpha=1,fill=COLS[state_ini]) +
+               geom_polygon(data=datapoly_end,mapping=aes(x=x,y=y),color=NA,alpha=1,fill=COLS[state_end])
+    }
+    
+  }
+}
+
+gg1 <- g + geom_polygon(data=datapoly,mapping=aes(x=x,y=y),color=NA,alpha=1,fill=COLS['ICU']) +
+    
+    # State labels
+    annotate(geom="text",label="Admission",x=0,y=1000,angle = 90,color='white', fontface='bold',size=3.5) +
+    annotate(geom="text",label="ICU",x=1,y=1100,angle = 90,color='white', fontface='bold',size=3.5) +
+    annotate(geom="text",label="Discharge",x=2,y=800,angle = 90,color='white', fontface='bold',size=3.5) +
+    annotate(geom="text",label="Death",x=2,y=1800,angle = 90,color='white', fontface='bold',size=3.5) +
+    annotate(geom="text",label="Ward",x=2,y=2070,angle = 90,color='white', fontface='bold',size=3.5) +
+    
+    # N labels
+    annotate(geom="text",label=paste0("n=",STATES_MATRIX['Admission','ICU']),x=0.5,y=615,angle = 55,color='black', fontface='bold') +
+    annotate(geom="text",label=paste0("n=",STATES_MATRIX['Admission','Discharge']),x=1,y=765,angle = -3,color='black', fontface='bold') +
+    annotate(geom="text",label=paste0("n=",STATES_MATRIX['Admission','Death']),x=1,y=1840,angle = -5,color='black', fontface='bold') +
+    annotate(geom="text",label=paste0("n=",STATES_MATRIX['Admission','Ward']),x=1,y=2080,angle = -5,color='black', fontface='bold') +
+    annotate(geom="text",label=paste0("n=",STATES_MATRIX['ICU','Discharge']),x=1.5,y=1315,angle = 40,color='black', fontface='bold') +
+    annotate(geom="text",label=paste0("n=",STATES_MATRIX['ICU','Death']),x=1.5,y=1525,angle = 50,color='black', fontface='bold') +  
+    annotate(geom="text",label=paste0("n=",STATES_MATRIX['ICU','Ward']),x=1.49,y=1660,angle = 55,color='black', fontface='bold') +
+    
+    theme_void() 
+
+##-- Transparent
+gg1 + theme(plot.background = element_rect(fill = "transparent", color = NA))
+
+```
+

@@ -1,0 +1,109 @@
+---
+title: "Calendar plot"
+author: "GRBIO Divulga"
+date: "22nd June 2021"
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+#####################################################
+# Libraries
+#####################################################
+library(data.table)
+library(ggplot2)
+library(dplyr)             # easier data wrangling 
+library(viridis)
+library(lubridate)         # for easy date manipulation
+library(ggExtra)           # because remembering ggplot theme options is beyond me
+library(tidyr) 
+
+
+
+#####################################################
+# Load data
+#####################################################
+# load('datos.RData') --> Data is not available
+```
+
+
+
+```{r echo=FALSE, fig.width=10, message=FALSE}
+d_patients_comp <- d_patients %>% filter(!is.na(d_patients$h_admision))
+df0 <- data.frame(day=day(d_patients_comp$f_ingreso),
+                  hour=round(as.numeric(floor(24*d_patients_comp$h_admision))/2,0), # Every two hours
+                  month=lubridate::month(d_patients_comp$f_ingreso,label = TRUE),
+                  year=year(d_patients_comp$f_ingreso),
+                  week = strftime(d_patients_comp$f_ingreso, format = "%V"),
+                  wday=weekdays(d_patients_comp$f_ingreso,abbreviate = TRUE))
+df0$week2 <- as.character(2*floor(as.numeric(df0$week)/2))
+complete_data <- as.data.table(expand.grid(day=1:31,
+                               hour=0:11,
+                               month=c('mar','abr'), 
+                               year=2020))
+
+df0 <- as.data.table(df0)                 
+df1 <- df0[,.(.N),by=.(day,hour,month,year,week2,wday)]
+
+df2 <- merge.data.table(complete_data,df1,by=c('day','hour','month','year'),
+                        all.x=TRUE,all.y=FALSE)
+df2[is.na(N),N:=0]
+df2 <- df2[!(month=='feb' & day==30)]
+df2 <- df2[!(month=='feb' & day==31)]
+df2 <- df2[!(month=='abr' & day==31)]
+df2[is.na(wday),wday:=weekdays(as.Date(paste0('2020-',
+                                              ifelse(month=='feb','02',ifelse(month=='mar','03','04')),
+                                              '-',day)),abbreviate=TRUE)]
+df2[is.na(week2),week2:=as.character(2*floor(as.numeric(strftime(as.Date(paste0('2020-',
+                                               ifelse(month=='feb','02',ifelse(month=='mar','03','04')),
+                                               '-',day)), format = "%V"))/2))]
+
+df2$wday <- factor(ifelse(df2$wday=='lu.','Mo.',
+                          ifelse(df2$wday=='ma.','Tu.',
+                                        ifelse(df2$wday=='mi.','We.',
+                                               ifelse(df2$wday=='ju.','Th.',
+                                                      ifelse(df2$wday=='vi.','Fr.',
+                                                             ifelse(df2$wday=='sá.','Sa.','Su.')))))),
+                   levels=c('Mo.','Tu.','We.','Th.','Fr.','Sa.','Su.'))
+
+LABELS_WEEK <- c('March 2-March 15  (Pre-lockdown)',
+                 'March 16-March 29 (1st fortnight post-lockdown)',
+                 'March 30-April 12 (2nd fortnight post-lockdown)',
+                 'April 13-20 (3rd fortnight post-lockdown)')
+df2$week3 <- ifelse(df2$week2=='10',LABELS_WEEK[1],
+             ifelse(df2$week2=='12',LABELS_WEEK[2],
+             ifelse(df2$week2=='14',LABELS_WEEK[3],
+             ifelse(df2$week2=='16',LABELS_WEEK[4],NA))))
+
+df2$week3 <- factor(df2$week3,
+                    levels=LABELS_WEEK)
+LAB_HOUR <- paste0(seq(0,22,2),'-',seq(2,24,2))
+
+gg1 <- ggplot(df2[!is.na(week3) & df2$week3!=LABELS_WEEK[4]],aes(wday,hour,fill=N))+
+  geom_tile(color= "white",size=0.1) + 
+  scale_fill_viridis(name="no. hospitalizations",option ="B",direction=-1) + 
+  facet_grid(.~week3,labeller = label_wrap_gen(width=20)) + 
+  ylab('Time slot') + xlab('Weekday') +
+  scale_y_continuous(trans = "reverse", breaks = unique(df2$hour),labels=LAB_HOUR) +
+  scale_x_discrete() +
+  theme_minimal(base_size = 8) +
+  labs(title= "Hospitalizations by time slot, weekday and fortnight") +
+  theme(legend.position = "bottom") +
+  theme(plot.title=element_text(size = 14))+
+  theme(axis.text.y=element_text(size=10,face='bold')) +
+  theme(axis.text.x=element_text(size=10,angle = 90,vjust = 0,hjust=1,face='bold')) +
+  theme(strip.background = element_rect(colour="white"))+
+  theme(plot.title=element_text(hjust=0))+
+  theme(axis.ticks=element_blank())+
+  theme(axis.title = element_text(size=10,face='bold'))+
+  theme(legend.title=element_text(size=10,face='bold'))+
+  theme(legend.text=element_text(size=8,face='bold'))+
+  theme(strip.text.x = element_text(size = 12,face = 'bold'))+
+  removeGrid()
+
+  ## - Transparent
+  gg1 + theme(rect = element_rect(fill = "transparent"))
+  
+```
+
