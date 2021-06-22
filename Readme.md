@@ -2,6 +2,8 @@
 
 This data visualization (dataviz) infographics presents six plots based on COVID-19 data from hospitalized patients during the pandemic Spanish first wave. Each graphic explores different statistical concepts.
 
+This is a part of [GRBIO Divulga](https://grbio.upc.edu/en/grbio-divulga/grbio-divulga) initiative.
+
 ## Balloon plot
 
 ### **How diagnostic and status were related?**
