@@ -1,10 +1,10 @@
-## Data Visualization
+# Data Visualization
 
 This data visualization (dataviz) infographics presents six plots based on COVID-19 data from hospitalized patients during the pandemic Spanish first wave. Each graphic explores different statistical concepts.
 
-### Balloon plot
+## Balloon plot
 
-#### **How diagnostic and status were related?**
+### **How diagnostic and status were related?**
 
 This Balloon plot is acontingency table for the frequency of the different diagnostics and the status,individually and jointly.
 
