@@ -8,7 +8,7 @@ This is a part of the [GRBIO Divulga](https://grbio.upc.edu/en/grbio-divulga/grb
 
 ### **How diagnostic and status were related?**
 
-This **Balloon plot** is acontingency table for the frequency of the different diagnostics and the status,individually and jointly.
+This **Balloon plot** is acontingency table for the frequency of the different diagnostics and the status, individually and jointly.
 
 ![balloon](figures/balloon.png)
 
@@ -25,7 +25,7 @@ The **Coxcomb** or **Rose diagram** was designed by Florence Nightingale. This p
 
 ### **Is the length of ICU stay related to the patient’s age?**
 
-This barplot shows that there is no relation between the length of ICU stay and the age
+This **barplot** shows that there is no relation between the length of ICU stay and the age
 
 ![barplot](figures/bar_plot.png)
 
