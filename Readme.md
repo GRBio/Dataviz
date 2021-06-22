@@ -2,7 +2,7 @@
 
 This data visualization (dataviz) infographics presents six plots based on COVID-19 data from hospitalized patients during the pandemic Spanish first wave. Each graphic explores different statistical concepts.
 
-This is a part of [GRBIO Divulga](https://grbio.upc.edu/en/grbio-divulga/grbio-divulga) initiative.
+This is a part of the [GRBIO Divulga](https://grbio.upc.edu/en/grbio-divulga/grbio-divulga) initiative.
 
 ## Balloon plot
 
@@ -17,7 +17,7 @@ This Balloon plot is acontingency table for the frequency of the different diagn
 
 ### **Among the total number of COVID-19 hospitalizations per day during March-Abril 2020 what was the proportion of women?**
 
-The **Coxcomb** or **Rose diagram** was designed by Florence Nightingale. This plot is a variation of a pie chart highlighting the evolution of COVID19 hospitalizations during March and April of 2020. The area of a section represents the value of the corresponding category. This current plot allows us to visualize i) the total number of hospitalizations per day and ii) the proportion of hospitalized women.
+The **Coxcomb** or **Rose diagram** was designed by Florence Nightingale. This plot is a variation of a pie chart highlighting the evolution of COVID19 hospitalizations during March and April of 2020. The area of a section represents the value of the corresponding category. This current plot allows us to visualize: i) the total number of hospitalizations per day and ii) the proportion of hospitalized women.
 
 ![coxcomb](figures/coxcomb.png)
 
