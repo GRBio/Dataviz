@@ -4,7 +4,7 @@ This data visualization (dataviz) infographics presents six plots based on COVID
 
 ### Balloon plot
 
-**How diagnostic and status were related?**
+#### **How diagnostic and status were related?**
 
 This Balloon plot is acontingency table for the frequency of the different diagnostics and the status,individually and jointly.
 
