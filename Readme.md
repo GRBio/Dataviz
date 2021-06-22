@@ -8,6 +8,9 @@ This data visualization (dataviz) infographics presents six plots based on COVID
 
 This Balloon plot is acontingency table for the frequency of the different diagnostics and the status,individually and jointly.
 
+![balloon](figures/balloon.png)
+
+
 ### Rose diagram
 
 **Among the total number of COVID-19 hospitalizations per day during March-Abril 2020 what was the proportion of women?**
@@ -21,6 +24,8 @@ The **Coxcomb** or **Rose diagram** was designed by Florence Nightingale. This p
 **Is the length of ICU stay related to the patient’s age?**
 
 This barplot shows that there is no relation between the length of ICU stay and the age
+
+![barplot](figures/barplot.png)
 
 ### Correlation plot
 
