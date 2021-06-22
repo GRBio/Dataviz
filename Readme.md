@@ -14,6 +14,8 @@ This Balloon plot is acontingency table for the frequency of the different diagn
 
 The **Coxcomb** or **Rose diagram** was designed by Florence Nightingale. This plot is a variation of a pie chart highlighting the evolution of COVID19 hospitalizations during March and April of 2020. The area of a section represents the value of the corresponding category. This current plot allows us to visualize i) the total number of hospitalizations per day and ii) the proportion of hospitalized women.
 
+![image](figures/coxcomb.png)
+
 ### Barplot
 
 **Is the length of ICU stay related to the patient’s age?**
