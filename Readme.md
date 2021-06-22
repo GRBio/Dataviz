@@ -8,7 +8,7 @@ This is a part of the [GRBIO Divulga](https://grbio.upc.edu/en/grbio-divulga/grb
 
 ### **How diagnostic and status were related?**
 
-This Balloon plot is acontingency table for the frequency of the different diagnostics and the status,individually and jointly.
+This **Balloon plot** is acontingency table for the frequency of the different diagnostics and the status,individually and jointly.
 
 ![balloon](figures/balloon.png)
 
@@ -41,7 +41,7 @@ The **Correlation plot** represents associations between factors through ellipse
 
 ### **How were hospitalizations temporarily distributed?**
 
-Calendar plot represents an indicator over time using a color scale associating more intense colors with larger magnitudes. On March 14th, 2020, the lockdown began in Spain. The plot represents the number of hospitalizations in HM hospitals by fortnight, weekday and time slot. There was a rebound in hospitalizations in the first fortnight post-confinement that was reversed in the subsequent fortnight. The time slots with the highest number of hospitalizations were located between noon and 10pm.  and there were slightly fewer hospitalizations on weekends. In the worst scenario, more than 25 hospitalizations were recorded every 2 hours, that is, one every 5 minutes.
+**Calendar plot** represents an indicator over time using a color scale associating more intense colors with larger magnitudes. On March 14th, 2020, the lockdown began in Spain. The plot represents the number of hospitalizations in HM hospitals by fortnight, weekday and time slot. There was a rebound in hospitalizations in the first fortnight post-confinement that was reversed in the subsequent fortnight. The time slots with the highest number of hospitalizations were located between noon and 10pm.  and there were slightly fewer hospitalizations on weekends. In the worst scenario, more than 25 hospitalizations were recorded every 2 hours, that is, one every 5 minutes.
 
 ![calendar](figures/calendar_plot.png)
 
