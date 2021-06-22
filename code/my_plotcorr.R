@@ -50,7 +50,7 @@ my.plotcorr <- function (corr, outline = FALSE, col = "grey",
   ylabwidth <- max(strwidth(collabs[cols], units = "figure", cex = cex.lab))/(plt[4] - plt[3])
   ylabwidth <- ylabwidth * maxdim/(1 - ylabwidth)
   plot(c(-xlabwidth - 0.5, maxdim + 0.5), c(0.5, maxdim + 1 + ylabwidth), type = "n", bty = bty, axes = axes, xlab = "", ylab = "", asp = asp, cex.lab = cex.lab, ...)
-  ##-- New
+
   if(is.na(labels[1])){
     R_LABS <- rowlabs[rows]
     C_LABS <- collabs[cols]
@@ -65,7 +65,7 @@ my.plotcorr <- function (corr, outline = FALSE, col = "grey",
   mtext(ylab, 2, 0, font=2)
   mat <- diag(c(1, 1))
   plotcorrInternal <- function() {
-    if (i == j){ #diag behavior
+    if (i == j){ 
       if (diag == 'none'){
         return()
       } else if (diag == 'number'){
@@ -79,12 +79,6 @@ my.plotcorr <- function (corr, outline = FALSE, col = "grey",
         polygon(ell, col = col[i, j])
         if (outline)
           lines(ell)
-        ########################
-        # Modification --> Add option "hist": 
-        # round(corr[i, j], digits=digits)
-        # by:
-        # formatC(corr[i, j], format='f' ,digits=digits)
-        ########################
       } else if (diag == 'hist'){
         for(i in 1:5){
           subplot(hist(as.numeric(dataset[,i]),xlab='',ylab='',main='',col='#445BC1',border = 'black'),
@@ -95,8 +89,8 @@ my.plotcorr <- function (corr, outline = FALSE, col = "grey",
         }
         par(bty=bty)
       }
-    } else if (i >= j){ #lower half of plot
-      if (lower.panel == 'ellipse') { #check if ellipses should go here
+    } else if (i >= j){
+      if (lower.panel == 'ellipse') { 
         mat[1, 2] <- corr[i, j]
         mat[2, 1] <- mat[1, 2]
         ell <- ellipse(mat, t = 0.43)
@@ -105,19 +99,14 @@ my.plotcorr <- function (corr, outline = FALSE, col = "grey",
         polygon(ell, col = col[i, j])
         if (outline)
           lines(ell)
-      } else if (lower.panel == 'number') { #check if ellipses should go here
-        ########################
-        # Modification --> Change: 
-        # round(corr[i, j], digits=digits)
-        # by:
-        # formatC(corr[i, j], format='f' ,digits=digits)
-        ########################
+      } else if (lower.panel == 'number') { 
+
         text(j + 0.3, length(rows) + 1 - i, formatC(corr[i, j], format='f' ,digits=digits), adj = 1, cex = cex, font=2)
       } else {
         return()
       }
-    } else { #upper half of plot
-      if (upper.panel == 'ellipse') { #check if ellipses should go here
+    } else { 
+      if (upper.panel == 'ellipse') { 
         mat[1, 2] <- corr[i, j]
         mat[2, 1] <- mat[1, 2]
         ell <- ellipse(mat, t = 0.43)
@@ -126,7 +115,7 @@ my.plotcorr <- function (corr, outline = FALSE, col = "grey",
         polygon(ell, col = col[i, j])
         if (outline)
           lines(ell)
-      } else if (upper.panel == 'number') { #check if ellipses should go here
+      } else if (upper.panel == 'number') { 
         text(j + 0.3, length(rows) + 1 - i, round(corr[i, j], digits=digits), adj = 1, cex = cex, font=2)
       } else {
         return()
@@ -141,7 +130,7 @@ my.plotcorr <- function (corr, outline = FALSE, col = "grey",
   invisible()
 }
 
-## modification of function of the package corrplot
+
 colorlegend2 <- function (colbar, labels, at = NULL, xlim = c(0, 1), 
                          ylim = c(0,1), vertical = TRUE, ratio.colbar = 0.4, lim.segment = "auto", 
                          align = c("c", "l", "r"), addlabels = TRUE,...){
@@ -176,11 +165,6 @@ colorlegend2 <- function (colbar, labels, at = NULL, xlim = c(0, 1),
       pos.xlabel <- rep(xlim[1] + xgap * max(rat2, rat1),length(at))
       switch(align, l = text(pos.xlabel, y = at, labels = labels,pos = 4, ...), 
                     r = text(xlim[2], y = at, labels = labels, pos = 2, ...),
-             ########################
-             # Modification --> Adding: 
-             # + seq(0.04,0,length.out = length(at))
-             # in ordre to match the labels
-             ########################
                     c = text((pos.xlabel + xlim[2])/2 + 0.1,y = at + seq(0.04,0,length.out = length(at)), labels = labels, ...),
                     stop("programming error - should not have reached this line!"))
     }
