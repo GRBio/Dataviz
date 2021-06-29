@@ -8,7 +8,7 @@ This is a part of the [GRBIO Divulga](https://grbio.upc.edu/en/grbio-divulga/grb
 
 ### **How diagnostic and status were related?**
 
-This **Balloon plot** is acontingency table for the frequency of the different diagnostics and the status, individually and jointly.
+This **Balloon plot** is a contingency table for the frequency of the different diagnostics and the status, individually and jointly.
 
 ![balloon](figures/balloon.png)
 
