@@ -33,7 +33,7 @@ This **barplot** shows that there is no relation between the length of ICU stay 
 
 ### **What is the relationship between patient characteristics, such as oxygen saturation, temperature and days in the ICU?**
 
-The **Correlation plot** represents associations between factors through ellipses. An ellipse close to a circumference indicates lack of relationship, while ellipses more elongated indicate a direct relationship if they grow to the right or an inverse relationship otherwise. In this plot two measurements of $O_2$ Sats at different times were highly correlated (direct relationship). In turn, these saturations were moderately inversely related to the days in ICU (thehigher the saturation, the fewer days in the ICU)
+The **Correlation plot** represents associations between factors through ellipses. An ellipse close to a circumference indicates lack of relationship, while ellipses more elongated indicate a direct relationship if they grow to the right or an inverse relationship otherwise. In this plot two measurements of O<sub>2</sub> Sats at different times were highly correlated (direct relationship). In turn, these saturations were moderately inversely related to the days in ICU (thehigher the saturation, the fewer days in the ICU)
 
 ![correlation](figures/correlation_plot.png)
 
