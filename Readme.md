@@ -8,7 +8,7 @@ This is a part of the [GRBIO Divulga](https://grbio.upc.edu/en/grbio-divulga/grb
 
 ### **How diagnostic and status were related?**
 
-This **Balloon plot** is a contingency table for the frequency of the different diagnoses and the status, individually and jointly. Each balloon reflects the relative magnitude of the corresponding component. The larger and, therefore, the purplish is the balloon the higher is the frequency. For instance, the most common diagnosis was *discharge* when is combined with a breathing difficulty status. The smaller and, therefore, the yellowish is the balloon the lower is the frequency. For example, the less common frequency is the combination of coughing and a transfer diagnosis.
+This **Balloon plot** is a contingency table for the frequency of the different diagnoses and the status, individually and jointly. Each balloon reflects the relative magnitude of the corresponding component. The larger and, therefore, the purplish is the balloon the higher is the frequency. For instance, the most common status was discharge when is combined with a breathing difficulty diagnosis. The smaller and, therefore, the yellowish is the balloon the lower is the frequency. For example, the less common frequency is the combination of coughing and a transfer status.
 
 ![balloon](figures/balloon.png)
 
