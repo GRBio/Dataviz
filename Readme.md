@@ -25,7 +25,7 @@ The **Coxcomb** or **Rose diagram** was designed by Florence Nightingale. This p
 
 ### **Is the length of ICU stay related to the patient’s age?**
 
-This **barplot** shows that there is no relation between the length of ICU stay and the age
+A **barplot** shows the relation between a numeric and a categoric variable. Each category of the categoric variable is represented as a bar and the size of the bar represents the numeric value that it takes. In this case, the numeric variable is the median of the length of ICU stay and the categoric variable is the age of the patient. On this barplot we can see that there is no relation between the median of the length of ICU stay and the age of the patient.
 
 ![barplot](figures/bar_plot.png)
 
