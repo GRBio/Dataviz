@@ -8,7 +8,7 @@ This is a part of the [GRBIO Divulga](https://grbio.upc.edu/en/grbio-divulga/grb
 
 ### **How diagnostic and status were related?**
 
-This **Balloon plot** is a contingency table for the frequency of the different diagnoses and the status, individually and jointly. Each balloon reflects the relative magnitude of the corresponding component. The larger and, therefore, the purplish is the balloon the higher is the frequency. For instance, the most common status was discharge when is combined with a breathing difficulty diagnosis. The smaller and, therefore, the yellowish is the balloon the lower is the frequency. For example, the less common frequency is the combination of coughing and a transfer status.
+This **Balloon plot** is acontingency table for the frequency of the different diagnostics and the status, individually and jointly.
 
 ![balloon](figures/balloon.png)
 
@@ -25,7 +25,7 @@ The **Coxcomb** or **Rose diagram** was designed by Florence Nightingale. This p
 
 ### **Is the length of ICU stay related to the patient’s age?**
 
-A **barplot** shows the relation between a numeric and a categoric variable. Each category of the categoric variable is represented as a bar and the size of the bar represents the numeric value that it takes. In this case, the numeric variable is the median of the length of ICU stay and the categoric variable is the age of the patient. On this barplot we can see that there is no relation between the median of the length of ICU stay and the age of the patient.
+This **barplot** shows that there is no relation between the length of ICU stay and the age
 
 ![barplot](figures/bar_plot.png)
 
@@ -33,7 +33,7 @@ A **barplot** shows the relation between a numeric and a categoric variable. Eac
 
 ### **What is the relationship between patient characteristics, such as oxygen saturation, temperature and days in the ICU?**
 
-The **Correlation plot** represents associations between factors through ellipses. An ellipse close to a circumference indicates lack of relationship, while ellipses more elongated indicate a direct relationship if they grow to the right or an inverse relationship otherwise. In this plot two measurements of O<sub>2</sub> Sats at different times were highly correlated (direct relationship). In turn, these saturations were moderately inversely related to the days in ICU (thehigher the saturation, the fewer days in the ICU)
+The **Correlation plot** represents associations between factors through ellipses. An ellipse close to a circumference indicates lack of relationship, while ellipses more elongated indicate a direct relationship if they grow to the right or an inverse relationship otherwise. In this plot two measurements of $O_2$ Sats at different times were highly correlated (direct relationship). In turn, these saturations were moderately inversely related to the days in ICU (thehigher the saturation, the fewer days in the ICU)
 
 ![correlation](figures/correlation_plot.png)
 
